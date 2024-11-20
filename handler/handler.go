@@ -16,6 +16,8 @@ type Handler interface {
 	ShowUserTable() error
 	GetUserIDs() ([]int, error)
 	GetUserByID(userID int) (*User, error)
+	CreateProduct(name string, categoryID int, price float64, stockQuantity int, description string) error
+	DeleteProduct(productID int) error // Tambahkan ini jika belum ada untuk fitur delete
 }
 
 type User struct {
@@ -85,7 +87,7 @@ func (h *HandlerImpl) ShowProductTable() error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("%-10d %-30s %-10d %-10.2f %-10d\n", id, name, categoryID, price, stockQuantity)
+		fmt.Printf("%-10d %-30s %-10d %-20.2f %-10d\n", id, name, categoryID, price, stockQuantity)
 	}
 	return nil
 }
@@ -138,4 +140,21 @@ func (h *HandlerImpl) GetUserByID(userID int) (*User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (h *HandlerImpl) CreateProduct(name string, categoryID int, price float64, stockQuantity int, description string) error {
+	query := "INSERT INTO Product (ProductName, CategoryID, Price, StockQuantity, Description) VALUES (?, ?, ?, ?, ?)"
+	_, err := h.DB.Exec(query, name, categoryID, price, stockQuantity, description)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (h *HandlerImpl) DeleteProduct(productID int) error {
+	_, err := h.DB.Exec("DELETE FROM Product WHERE ProductID = ?", productID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
