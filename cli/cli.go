@@ -9,27 +9,15 @@ import (
 )
 
 type CLI struct {
+	paymentHandler handler.PaymentHandler
+	productHandler handler.HandlerProduct
 	handler        handler.Handler
-	handlerProduct handler.HandlerProduct
-	//hProduct       handler_product.HandlerProduct
-	user *handler.User
+	user           *handler.User
 }
 
-func NewCLI(h handler.Handler) *CLI {
-	return &CLI{handler: h}
+func NewCLI(h handler.Handler, ph handler.PaymentHandler, hp handler.HandlerProduct) *CLI {
+	return &CLI{handler: h, paymentHandler: ph, productHandler: hp}
 }
-
-func ProductCLI(hp handler.HandlerProduct) *CLI {
-	return &CLI{handlerProduct: hp}
-}
-
-func (c *CLI) ProductCLI(hp handler.HandlerProduct) {
-	c.handlerProduct = hp
-}
-
-//func (c *CLI) PCLI(h handler_product.HandlerProduct) {
-//	c.handlerProduct = h
-//}
 
 func (c *CLI) clearScreen() {
 	cmd := exec.Command("clear")
@@ -104,11 +92,13 @@ func (c *CLI) showMainMenu() {
 			"Reporting",
 			"Update Item Stock",
 			"Buy Item",
+			"Show Orders",
 			"Exit",
 		}
 	} else {
 		options = []string{
 			"Buy Item",
+			"Show Orders",
 			"Exit",
 		}
 	}
@@ -129,6 +119,8 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 3:
 			c.showBuyMenu()
 		case 4:
+			c.showOrders()
+		case 5:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:
@@ -139,6 +131,8 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 1:
 			c.showBuyMenu()
 		case 2:
+			c.showOrders()
+		case 3:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:

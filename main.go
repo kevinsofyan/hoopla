@@ -9,13 +9,11 @@ import (
 func main() {
 	db := config.ConnectDB()
 	defer db.Close()
+	h := handler.NewHandler(db)
+	ph := handler.NewPaymentHandler(db)
+	hp := handler.NewHandlerProduct(db)
 
-	handler := handler.NewHandler(db)
-	productHandler := handler.NewHandlerProduct(db)
-	//hPP := handler_product.NewHandlerProduct(db)
-
-	cli := cli.NewCLI(handler)
-	cli.ProductCLI(productHandler)
+	cli := cli.NewCLI(h, ph, hp)
 	cli.Init()
 
 	//cli.ProductCLI(productHandler)
