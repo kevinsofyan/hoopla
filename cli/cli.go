@@ -42,6 +42,31 @@ func (c *CLI) Init() {
 	}
 }
 
+func (c *CLI) addCategory() error {
+	var name string
+	fmt.Print("Enter the name of the category: ")
+	fmt.Scan(&name)
+	err := c.handler.InsertCategory(name)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Category inserted successfully")
+	return nil
+}
+
+// delete category
+func (c *CLI) deleteCategory() error {
+	var name string
+	fmt.Print("Enter the name of the category: ")
+	fmt.Scan(&name)
+	err := c.handler.DeleteCategory(name)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Category deleted successfully")
+	return nil
+}
+
 func (c *CLI) chooseUser() {
 	c.clearScreen()
 	fmt.Println(Logo)
@@ -89,6 +114,8 @@ func (c *CLI) showMainMenu() {
 		options = []string{
 			"Reporting",
 			"Update Item Stock",
+			"Update category",
+			"delete category",
 			"Buy Item",
 			"Exit",
 		}
@@ -113,8 +140,12 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 2:
 			c.showProductMenu()
 		case 3:
-			c.showBuyMenu()
+			c.addCategory();
 		case 4:
+			c.deleteCategory()
+		case 5:
+			c.showBuyMenu()
+		case 6:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:
@@ -132,3 +163,6 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		}
 	}
 }
+
+
+
