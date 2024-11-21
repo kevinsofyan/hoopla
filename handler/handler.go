@@ -152,7 +152,7 @@ func (h *HandlerImpl) ShowProductTable() error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("%-10d %-30s %-10d %-10.2f %-10d\n", id, name, categoryID, price, stockQuantity)
+		fmt.Printf("%-10d %-30s %-10d %-20.2f %-10d\n", id, name, categoryID, price, stockQuantity)
 	}
 	return nil
 }
