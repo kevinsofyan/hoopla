@@ -11,6 +11,11 @@ func main() {
 	defer db.Close()
 	h := handler.NewHandler(db)
 	ph := handler.NewPaymentHandler(db)
-	cli := cli.NewCLI(h, ph)
+	hp := handler.NewHandlerProduct(db)
+
+	cli := cli.NewCLI(h, ph, hp)
 	cli.Init()
+
+	//cli.ProductCLI(productHandler)
+
 }
