@@ -9,7 +9,8 @@ import (
 func main() {
 	db := config.ConnectDB()
 	defer db.Close()
-	handler := handler.NewHandler(db)
-	cli := cli.NewCLI(handler)
+	h := handler.NewHandler(db)
+	ph := handler.NewPaymentHandler(db)
+	cli := cli.NewCLI(h, ph)
 	cli.Init()
 }

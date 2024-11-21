@@ -9,12 +9,13 @@ import (
 )
 
 type CLI struct {
-	handler handler.Handler
-	user    *handler.User
+	paymentHandler handler.PaymentHandler
+	handler        handler.Handler
+	user           *handler.User
 }
 
-func NewCLI(h handler.Handler) *CLI {
-	return &CLI{handler: h}
+func NewCLI(h handler.Handler, ph handler.PaymentHandler) *CLI {
+	return &CLI{handler: h, paymentHandler: ph}
 }
 
 func (c *CLI) clearScreen() {
@@ -90,11 +91,13 @@ func (c *CLI) showMainMenu() {
 			"Reporting",
 			"Update Item Stock",
 			"Buy Item",
+			"Show Orders",
 			"Exit",
 		}
 	} else {
 		options = []string{
 			"Buy Item",
+			"Show Orders",
 			"Exit",
 		}
 	}
@@ -115,6 +118,8 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 3:
 			c.showBuyMenu()
 		case 4:
+			c.showOrders()
+		case 5:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:
@@ -125,6 +130,8 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 1:
 			c.showBuyMenu()
 		case 2:
+			c.showOrders()
+		case 3:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:
