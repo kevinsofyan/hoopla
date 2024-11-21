@@ -92,12 +92,14 @@ func (c *CLI) showMainMenu() {
 			"Update Item Stock",
 			"Buy Item",
 			"Show Orders",
+			"Process Payment",
 			"Exit",
 		}
 	} else {
 		options = []string{
 			"Buy Item",
 			"Show Orders",
+			"Process Payment",
 			"Exit",
 		}
 	}
@@ -120,6 +122,8 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 4:
 			c.showOrders()
 		case 5:
+			c.showPaymentMenu()
+		case 6:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:
@@ -132,6 +136,8 @@ func (c *CLI) handleMainMenuChoice(choice int) {
 		case 2:
 			c.showOrders()
 		case 3:
+			c.showPaymentMenu()
+		case 4:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
 		default:
