@@ -9,13 +9,27 @@ import (
 )
 
 type CLI struct {
-	handler handler.Handler
-	user    *handler.User
+	handler        handler.Handler
+	handlerProduct handler.HandlerProduct
+	//hProduct       handler_product.HandlerProduct
+	user *handler.User
 }
 
 func NewCLI(h handler.Handler) *CLI {
 	return &CLI{handler: h}
 }
+
+func ProductCLI(hp handler.HandlerProduct) *CLI {
+	return &CLI{handlerProduct: hp}
+}
+
+func (c *CLI) ProductCLI(hp handler.HandlerProduct) {
+	c.handlerProduct = hp
+}
+
+//func (c *CLI) PCLI(h handler_product.HandlerProduct) {
+//	c.handlerProduct = h
+//}
 
 func (c *CLI) clearScreen() {
 	cmd := exec.Command("clear")

@@ -17,7 +17,8 @@ type Handler interface {
 	GetUserIDs() ([]int, error)
 	GetUserByID(userID int) (*User, error)
 	CreateProduct(name string, categoryID int, price float64, stockQuantity int, description string) error
-	DeleteProduct(productID int) error // Tambahkan ini jika belum ada untuk fitur delete
+	UpdateProduct(productID, stockQuantity int) error
+	DeleteProduct(productID int) error
 }
 
 type User struct {
@@ -141,7 +142,6 @@ func (h *HandlerImpl) GetUserByID(userID int) (*User, error) {
 	}
 	return &user, nil
 }
-
 func (h *HandlerImpl) CreateProduct(name string, categoryID int, price float64, stockQuantity int, description string) error {
 	query := "INSERT INTO Product (ProductName, CategoryID, Price, StockQuantity, Description) VALUES (?, ?, ?, ?, ?)"
 	_, err := h.DB.Exec(query, name, categoryID, price, stockQuantity, description)
@@ -151,10 +151,23 @@ func (h *HandlerImpl) CreateProduct(name string, categoryID int, price float64, 
 	return nil
 }
 
+func (h *HandlerImpl) UpdateProduct(productID, stockQuantity int) error {
+	query := "UPDATE Product SET StockQuantity = ? WHERE ProductID = ?"
+	_, err := h.DB.Exec(query, stockQuantity, productID)
+	if err != nil {
+		return fmt.Errorf("failed to update stock for ProductID %d: %v", productID, err)
+	}
+	return err
+}
+
 func (h *HandlerImpl) DeleteProduct(productID int) error {
 	_, err := h.DB.Exec("DELETE FROM Product WHERE ProductID = ?", productID)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (h *HandlerImpl) NewHandlerProduct(db *sql.DB) interface{} {
+
 }
