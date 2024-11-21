@@ -10,12 +10,13 @@ import (
 
 type CLI struct {
 	paymentHandler handler.PaymentHandler
+	productHandler handler.HandlerProduct
 	handler        handler.Handler
 	user           *handler.User
 }
 
-func NewCLI(h handler.Handler, ph handler.PaymentHandler) *CLI {
-	return &CLI{handler: h, paymentHandler: ph}
+func NewCLI(h handler.Handler, ph handler.PaymentHandler, hp handler.HandlerProduct) *CLI {
+	return &CLI{handler: h, paymentHandler: ph, productHandler: hp}
 }
 
 func (c *CLI) clearScreen() {
