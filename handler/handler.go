@@ -41,13 +41,13 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 }
 
 func (h *HandlerImpl) TotalSalesReport() error {
-	rows, err := h.DB.Query(`SELECT SUM(payment.PaymentAmount) FROM payment`)
+	rows, err := h.DB.Query(`SELECT SUM(Payment.PaymentAmount) FROM Payment`)
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
-	var hasil float64;
-	fmt.Println("Generating Total Sales Report...", hasil);
+	var hasil float64
+	fmt.Println("Generating Total Sales Report...", hasil)
 	for rows.Next() {
 		err := rows.Scan(&hasil)
 		if err != nil {
@@ -59,38 +59,42 @@ func (h *HandlerImpl) TotalSalesReport() error {
 }
 
 func (h *HandlerImpl) MostPopularProductReport() error {
-	rows, err := h.DB.Query(`SELECT ProductName, SUM(Quantity) AS TotalQuantity
-	FROM orderdetails
-	GROUP BY ProductID
-	ORDER BY TotalQuantity DESC`)
+	rows, err := h.DB.Query(`
+        SELECT p.ProductName, SUM(od.Quantity) AS TotalQuantity
+        FROM OrderDetails od
+        JOIN Product p ON od.ProductID = p.ProductID
+        GROUP BY p.ProductID
+        ORDER BY TotalQuantity DESC
+    `)
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 	fmt.Println("Generating Most Popular Product Report...")
 	for rows.Next() {
-		var productID, totalQuantity int
-		err := rows.Scan(&productID, &totalQuantity)
+		var productName string
+		var totalQuantity int
+		err := rows.Scan(&productName, &totalQuantity)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Product ID: %d, Total Quantity: %d\n", productID, totalQuantity)
+		fmt.Printf("Product Name: %s, Total Quantity: %d\n", productName, totalQuantity)
 	}
 	return nil
 }
 
 func (h *HandlerImpl) TotalRevenuePerProductReport() error {
-	rows, err := h.DB.Query(`SELECT product.Price * orderdetails.Quantity 
-	FROM product
-	INNER JOIN orderdetails
-	ON product.ProductID = orderdetails.ProductID`)
+	rows, err := h.DB.Query(`SELECT Product.Price * OrderDetails.Quantity 
+	FROM Product
+	INNER JOIN OrderDetails
+	ON Product.ProductID = OrderDetails.ProductID`)
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 	fmt.Println("Generating Total Revenue Per Product Report...")
 	for rows.Next() {
-		var totalRevenue float64;
+		var totalRevenue float64
 		err := rows.Scan(&totalRevenue)
 		if err != nil {
 			return err
@@ -103,7 +107,7 @@ func (h *HandlerImpl) TotalRevenuePerProductReport() error {
 func (h *HandlerImpl) CustomerCountPerCityReport() error {
 	fmt.Println("Generating Customer Count Per City Report...")
 	row, err := h.DB.Query(`SELECT City, COUNT(*) AS CustomerCount
-	FROM user
+	FROM User
 	WHERE Role = 'customer'
 	GROUP BY City
 	ORDER BY 
@@ -119,9 +123,9 @@ func (h *HandlerImpl) CustomerCountPerCityReport() error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("City: %s, Customer Count: %d\n", city, customerCount)	
+		fmt.Printf("City: %s, Customer Count: %d\n", city, customerCount)
 	}
-	
+
 	return nil
 }
 
