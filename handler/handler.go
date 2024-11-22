@@ -87,7 +87,7 @@ func (h *HandlerImpl) TotalRevenuePerProductReport() error {
 	rows, err := h.DB.Query(`SELECT Product.Price * OrderDetails.Quantity 
 	FROM Product
 	INNER JOIN OrderDetails
-	ON product.ProductID = OrderDetails.ProductID`)
+	ON Product.ProductID = OrderDetails.ProductID`)
 	if err != nil {
 		return err
 	}
