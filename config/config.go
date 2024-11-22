@@ -9,7 +9,7 @@ import (
 
 func ConnectDB() *sql.DB {
 	var err error
-	DB, err := sql.Open("mysql", "root:mypassword@tcp(127.0.0.1:3306)/hoopla_db")
+	DB, err := sql.Open("mysql", "test_user:test123@tcp(156.67.219.200:3306)/hoopla_db")
 	if err != nil {
 		log.Print("Error connecting to the database: ", err)
 		log.Fatal(err)
